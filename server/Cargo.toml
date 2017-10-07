@@ -1,0 +1,9 @@
+[package]
+name = "rundown-server"
+version = "0.1.0"
+authors = ["Michael Howell <michael@notriddle.com>"]
+
+[dependencies]
+ammonia = "1.0.0-rc1"
+comrak = "0.2.2"
+typed-arena = "1.2.0"

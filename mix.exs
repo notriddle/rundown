@@ -48,6 +48,9 @@ defmodule Mix.Tasks.Compile.RustServer do
   use Mix.Task
   @shortdoc "Compiles the Rust server"
   def run(_) do
+    File.rm_rf("priv/native")
+    File.mkdir_p("priv/native")
+
     if File.exists?(exe_prebuilt_path()) do
       File.cp(exe_prebuilt_path(), exe_priv_path())
     else
@@ -56,9 +59,6 @@ defmodule Mix.Tasks.Compile.RustServer do
   end
 
   defp compile do
-    File.rm_rf("priv/native")
-    File.mkdir_p("priv/native")
-
     {result, error_code} = System.cmd("cargo", ["build", "--release"],
       stderr_to_stdout: true,
       cd: "server/")

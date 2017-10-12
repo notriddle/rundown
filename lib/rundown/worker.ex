@@ -6,7 +6,14 @@ defmodule Rundown.Worker do
     GenServer.start_link(__MODULE__, :no_args, name: name)
   end
   def init(:no_args) do
-    port = Port.open({:spawn, "priv/native/rundown-server"}, [:binary])
+    # In case you were curious, Port.open will launch an executable on Windows
+    # without the `.exe` extension.
+    # The executable actually does have that extension,
+    # but we can leave it out here and Windows will implicitly recognize that
+    # priv\native\rundown-server (which does not exist) should launch
+    # priv\native\rundown-server.exe (which does).
+    path = Path.join([:code.priv_dir(:rundown), "native", "rundown-server"])
+    port = Port.open({:spawn, path}, [:binary])
     {:ok, port}
   end
   def handle_call({:convert, url, markdown}, _from, port) do

@@ -4,7 +4,7 @@ defmodule Rundown.Mixfile do
   def project do
     [
       app: :rundown,
-      version: "0.1.7",
+      version: "0.1.8",
       elixir: "~> 1.5",
       start_permanent: Mix.env == :prod,
       compilers: Mix.compilers ++ [:rust_server],
@@ -48,8 +48,8 @@ defmodule Mix.Tasks.Compile.RustServer do
   use Mix.Task
   @shortdoc "Compiles the Rust server"
   def run(_) do
-    File.rm_rf("priv/native")
-    File.mkdir_p("priv/native")
+    File.rm_rf(priv_path())
+    File.mkdir_p(priv_path())
 
     if File.exists?(exe_prebuilt_path()) do
       File.cp(exe_prebuilt_path(), exe_priv_path())
@@ -80,8 +80,11 @@ defmodule Mix.Tasks.Compile.RustServer do
   defp exe_build_path do
     "server/target/release/rundown-server#{exe_suffix()}"
   end
+  defp priv_path do
+    "#{Mix.Project.app_path()}/priv/native"
+  end
   defp exe_priv_path do
-    Path.join([:code.priv_dir(:rundown), "native", "rundown-server#{exe_suffix()}"])
+    "#{priv_path()}/rundown-server#{exe_suffix()}"
   end
   defp exe_prebuilt_path do
     {_, os} = :os.type()

@@ -1,0 +1,64 @@
+# Based on the "trust" template v0.1.1
+# https://github.com/japaric/trust/tree/v0.1.1
+
+environment:
+  global:
+    RUST_VERSION: stable
+    CRATE_NAME: rundown-server
+
+  matrix:
+    # Only building with MSVC.
+    - TARGET: i686-pc-windows-msvc
+    - TARGET: x86_64-pc-windows-msvc
+
+install:
+  - ps: >-
+      If ($Env:TARGET -eq 'x86_64-pc-windows-gnu') {
+        $Env:PATH += ';C:\msys64\mingw64\bin'
+      } ElseIf ($Env:TARGET -eq 'i686-pc-windows-gnu') {
+        $Env:PATH += ';C:\msys64\mingw32\bin'
+      }
+  - curl -sSf -o rustup-init.exe https://win.rustup.rs/
+  - rustup-init.exe -y --default-host %TARGET% --default-toolchain %RUST_VERSION%
+  - set PATH=%PATH%;C:\Users\appveyor\.cargo\bin
+  - rustc -Vv
+  - cargo -V
+
+test_script:
+  - if [%APPVEYOR_REPO_TAG%]==[false] (
+      pushd &&
+      cd server &&
+      cargo test --target %TARGET% &&
+      popd
+    )
+
+before_deploy:
+  - pushd && cd server && cargo build --target %TARGET% --release && popd
+  - ps: ci\before_deploy.ps1
+
+deploy:
+  artifact: /.*\.zip/
+  # TODO update `auth_token.secure`
+  # - Create a `public_repo` GitHub token. Go to: https://github.com/settings/tokens/new
+  # - Encrypt it. Go to https://ci.appveyor.com/tools/encrypt
+  # - Paste the output down here
+  auth_token:
+    secure: iV4VCTpphfjKHfT1XJfgWRJeBzrQB+R/E59aJf6DHc9FZoG99PRQLNzNZZJdCzCT
+  description: ''
+  on:
+    RUST_VERSION: stable
+    appveyor_repo_tag: true
+  provider: GitHub
+
+cache:
+  - C:\Users\appveyor\.cargo\registry
+  - server\target
+
+branches:
+  only:
+    # Release tags
+    - /^v\d+\.\d+\.\d+.*$/
+    - master
+
+# Building is done in the test phase, so we disable Appveyor's build phase.
+build: false

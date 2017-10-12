@@ -4,7 +4,7 @@ defmodule Rundown.Mixfile do
   def project do
     [
       app: :rundown,
-      version: "0.1.4",
+      version: "0.1.5",
       elixir: "~> 1.5",
       start_permanent: Mix.env == :prod,
       compilers: Mix.compilers ++ [:rust_server],
@@ -37,7 +37,7 @@ defmodule Rundown.Mixfile do
   defp package, do: [
     name: :rundown,
     description: "Convert Markdown into (a safe subset of) HTML",
-    files: ["prebuild", "lib", "mix.exs"],
+    files: ["prebuilt", "lib", "mix.exs"],
     maintainers: ["Michael Howell <michael@notriddle.com>"],
     licenses: ["MIT", "Apache-2.0"],
     links: %{"Github" => "https://github.com/notriddle/rundown/"}

@@ -4,7 +4,7 @@ defmodule Rundown.Mixfile do
   def project do
     [
       app: :rundown,
-      version: "0.1.6",
+      version: "0.1.7",
       elixir: "~> 1.5",
       start_permanent: Mix.env == :prod,
       compilers: Mix.compilers ++ [:rust_server],
@@ -81,7 +81,7 @@ defmodule Mix.Tasks.Compile.RustServer do
     "server/target/release/rundown-server#{exe_suffix()}"
   end
   defp exe_priv_path do
-    "priv/native/rundown-server#{exe_suffix()}"
+    Path.join([:code.priv_dir(:rundown), "native", "rundown-server#{exe_suffix()}"])
   end
   defp exe_prebuilt_path do
     {_, os} = :os.type()

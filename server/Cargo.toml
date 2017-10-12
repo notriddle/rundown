@@ -1,6 +1,6 @@
 [package]
 name = "rundown-server"
-version = "0.1.6"
+version = "0.1.7"
 authors = ["Michael Howell <michael@notriddle.com>"]
 
 [dependencies]

@@ -29,7 +29,7 @@ defmodule Rundown.Mixfile do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:earmark, "~> 1.2.4", only: :dev},
+      {:earmark, "~> 1.2.3", only: :dev},
       {:ex_doc, "~> 0.17.1", only: :dev},
     ]
   end

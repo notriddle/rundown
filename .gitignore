@@ -21,4 +21,4 @@ erl_crash.dump
 
 # Ignore compiled native code
 /priv/native/
-/prebuilt/
+/prebuild/

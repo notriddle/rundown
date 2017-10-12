@@ -37,7 +37,6 @@ defmodule Mix.Tasks.Compile.RustServer do
   use Mix.Task
   @shortdoc "Compiles the Rust server"
   def run(_) do
-    {_, os} = :os.type()
     if File.exists?(exe_prebuilt_path()) do
       File.cp(exe_prebuilt_path(), exe_priv_path())
     else
@@ -74,6 +73,7 @@ defmodule Mix.Tasks.Compile.RustServer do
     "priv/native/rundown-server#{exe_suffix()}"
   end
   defp exe_prebuilt_path do
+    {_, os} = :os.type()
     "prebuilt/#{Atom.to_string(os)}/rundown-server#{exe_suffix()}"
   end
   defp exe_suffix do

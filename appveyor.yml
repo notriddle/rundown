@@ -26,14 +26,13 @@ install:
 
 test_script:
   - if [%APPVEYOR_REPO_TAG%]==[false] (
-      pushd &&
       cd server &&
       cargo test --target %TARGET% &&
-      popd
+      cd ..
     )
 
 before_deploy:
-  - pushd && cd server && cargo build --target %TARGET% --release && popd
+  - cd server && cargo build --target %TARGET% --release && cd ..
   - ps: ci\before_deploy.ps1
 
 deploy:

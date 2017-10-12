@@ -2,11 +2,12 @@
 
 set -ex
 
+src=$(pwd)
+
 pushd server/
 
 main() {
-    local src=$(pwd) \
-          stage=
+    local stage=
 
     case $TRAVIS_OS_NAME in
         linux)

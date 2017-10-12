@@ -4,11 +4,12 @@ defmodule Rundown.Mixfile do
   def project do
     [
       app: :rundown,
-      version: "0.1.3",
+      version: "0.1.4",
       elixir: "~> 1.5",
       start_permanent: Mix.env == :prod,
       compilers: Mix.compilers ++ [:rust_server],
       deps: deps(),
+      package: package(),
       source_url: "https://github.com/notriddle/rundown",
       docs: [
         main: "readme",
@@ -28,9 +29,19 @@ defmodule Rundown.Mixfile do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:ex_doc, "~> 0.14", only: :dev},
+      {:earmark, "~> 1.2.4", only: :dev},
+      {:ex_doc, "~> 0.17.1", only: :dev},
     ]
   end
+
+  defp package, do: [
+    name: :rundown,
+    description: "Convert Markdown into (a safe subset of) HTML",
+    files: ["prebuild", "lib", "mix.exs"],
+    maintainers: ["Michael Howell <michael@notriddle.com>"],
+    licenses: ["MIT", "Apache-2.0"],
+    links: %{"Github" => "https://github.com/notriddle/rundown/"}
+  ]
 end
 
 defmodule Mix.Tasks.Compile.RustServer do
@@ -46,7 +57,7 @@ defmodule Mix.Tasks.Compile.RustServer do
 
   defp compile do
     File.rm_rf("priv/native")
-    File.mkdir("priv/native")
+    File.mkdir_p("priv/native")
 
     {result, error_code} = System.cmd("cargo", ["build", "--release"],
       stderr_to_stdout: true,
